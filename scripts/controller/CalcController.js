@@ -34,8 +34,39 @@ class CalcController{
     ClearEntry(){
         this._operation.pop(); //pop retira o ultimo elemento de um array
     }
+
+    getLastOperation(){
+       return this._operation[this._operation.length-1];//this._operation.length-1 pega o ultimo elemento do array (-1 pq tem uma posição a mais sempre pq começa em 0)
+    }
+
+    isOperator(value){
+        //indexOf  busca o valor no array, se encontra traz a posição, senao, traz o valor -1
+        return (['+', '-', '*', '/', '%'].indexOf(value) > -1)
+    }
+    setLastOperation(value){
+        this._operation[this._operation.length-1] = value;
+    }
     addOperation(value){
-        this._operation.push(value);
+        //verifica se o ultimo elemento é numero ou sinal
+        if(isNaN(this.getLastOperation())){//this.getLastOperation() é o ultimo valor que foi digitado
+            //string
+            if(this.isOperator(value)){
+                //trocar operador
+                this.setLastOperation(value);
+            }
+            else if(isNaN(value)){
+                 console.log(value);
+            }
+            else{
+                this._operation.push(value);
+            }
+        }
+        else{
+            //numero
+            let newvalue = this.getLastOperation().toString() + value.toString(); //converte em string pra concatenar em vez de somar quando um novo numero é digitado
+            this.setLastOperation(parseInt(newvalue));
+        }
+        
         console.log(this._operation);
     }
     setError(){
@@ -50,23 +81,27 @@ class CalcController{
                 this.ClearEntry();
                 break;
             case 'soma': 
-                this.ClearEntry();
+                this.addOperation('+');
                 break;
             case 'subtracao': 
-                this.ClearEntry();
+                this.addOperation('-');
                 break;
             case 'divisao': 
-                this.ClearEntry();
+                this.addOperation('/');
                 break;
             case 'porcento': 
-                this.ClearEntry();
+                this.addOperation('%');
                 break;
             case 'multiplicacao': 
-                this.ClearEntry();
+                this.addOperation('*');
                 break;
             case 'igual': 
-                this.ClearEntry();
+                
                 break;
+            case 'ponto':
+                this.addOperation('.');
+                break;
+
             case '0':
             case '1':
             case '2':

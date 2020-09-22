@@ -20,6 +20,7 @@ class CalcController{
         this.setDisplayDateTime();
 
       }, 1000); // pega a hora e a data atual e o set interval pra mudar a tela cada segundo
+      this.setLastNumberToDisplay();
     
     }
     addEventListenerAll(element, events, fn){
@@ -30,9 +31,11 @@ class CalcController{
 
     ClearAll(){
         this._operation = [];
+        this.setLastNumberToDisplay();
     }
     ClearEntry(){
         this._operation.pop(); //pop retira o ultimo elemento de um array
+        this.setLastNumberToDisplay();
     }
 
     getLastOperation(){
@@ -46,6 +49,52 @@ class CalcController{
     setLastOperation(value){
         this._operation[this._operation.length-1] = value;
     }
+
+    pushOperation(value){
+        this._operation.push(value);
+
+        if(this._operation.length > 3){
+
+            this.calc();
+        }
+    }
+
+    calc(){
+        let last = "";
+
+        if(this._operation.length > 3){
+             last = this._operation.pop(); // pop retira o ultimo elemento do array e guarda em last
+        }
+        
+        let result = eval(this._operation.join("")); //eval calcula e join junta o array e transforma em string
+
+        if(last == '%'){
+            result /= 100; // é a mesma coisa que result = result / 100
+            this._operation = [result];
+        }else{
+
+            this._operation = [result];
+            if(last) this._operation.push(last);
+        }
+
+
+        this.setLastNumberToDisplay();
+    }
+
+    setLastNumberToDisplay(){
+        let lastNumber;
+
+        for(let i = this._operation.length-1; i>=0; i--){
+            if(!this.isOperator (this._operation[i])) {
+                lastNumber = this._operation[i];
+                break;
+            }
+        }
+
+        if(!lastNumber) lastNumber = 0;
+        this.displayCalc = lastNumber;
+    }
+
     addOperation(value){
         //verifica se o ultimo elemento é numero ou sinal
         if(isNaN(this.getLastOperation())){//this.getLastOperation() é o ultimo valor que foi digitado
@@ -58,13 +107,21 @@ class CalcController{
                  console.log(value);
             }
             else{
-                this._operation.push(value);
+                this.pushOperation(value);
+                this.setLastNumberToDisplay();
             }
         }
         else{
-            //numero
+            if(this.isOperator(value)){
+                this.pushOperation(value);
+            }else{
+                //numero
             let newvalue = this.getLastOperation().toString() + value.toString(); //converte em string pra concatenar em vez de somar quando um novo numero é digitado
             this.setLastOperation(parseInt(newvalue));
+
+            this.setLastNumberToDisplay();
+            }
+            
         }
         
         console.log(this._operation);
@@ -96,7 +153,7 @@ class CalcController{
                 this.addOperation('*');
                 break;
             case 'igual': 
-                
+                this.calc();
                 break;
             case 'ponto':
                 this.addOperation('.');

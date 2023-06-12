@@ -4,7 +4,7 @@ Este é um trabalho desenvolvido para fins de estudo.
 
 ## 🔧 Testes
 
-#### * Clone este repositório
+#### Clone este repositório
     $ git clone <https://github.com/alinebeatrizw/CalculadoraJS>
 
  * Acesse a pasta do projeto; 

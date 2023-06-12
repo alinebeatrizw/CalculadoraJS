@@ -15,7 +15,6 @@ Este é um trabalho desenvolvido para fins de estudo.
 ## 🛠️ Construído com
 
 * [HTML](https://developer.mozilla.org/pt-BR/docs/Web/HTML) 
-* [CSS](https://developer.mozilla.org/pt-BR/docs/Web/CSS) 
 * [JavaScript](https://developer.mozilla.org/pt-BR/docs/Web/JavaScript) 
 
 ## 🚀 Resultados
